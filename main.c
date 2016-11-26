@@ -7,7 +7,13 @@
 #define FORMAT 16
 #define TIME 5
 
-int main()
+/*
+ * this function record time seconds of voice
+ * return value:
+ *  > 0 - size of recorded data
+ *  < 0 - error
+ */
+int record_sound(char *song_data, int time)
 {
     pa_simple *pulse_desc;
     pa_sample_spec parametrs;
@@ -32,9 +38,8 @@ int main()
         return -1; /* error opening audio record stream */
     }
 
-    int size = RATE * CHANNELS * FORMAT * TIME / 8;
+    int size = RATE * CHANNELS * FORMAT * time / 8;
     int status;
-    char *song_data;
 
     song_data = (char *) malloc(size);
 
@@ -46,7 +51,13 @@ int main()
 
     pa_simple_free(pulse_desc);
 
-    //передавать дальше следует указатель на массив такого типа
-    //(int16_t *) song_data;
-    //и его размер (и не забыть его освободить)
+    return size;
+}
+
+int main()
+{
+    char *data;
+    int size;
+
+    size = record_sound(data, TIME);
 }
