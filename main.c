@@ -9,6 +9,7 @@
 
 /*
  * this function record time seconds of voice
+ * do not forget to free soung_data after usage
  * return value:
  *  > 0 - size of recorded data
  *  < 0 - error
