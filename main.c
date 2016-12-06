@@ -113,5 +113,6 @@ int main()
     printf("Name determined\n");
 
     free_mfcc();
+    free(data);
     return 0;
 }
