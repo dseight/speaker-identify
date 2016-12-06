@@ -313,7 +313,7 @@ int determine_name(double *vector)
 {
     int status;
     int num;
-    struct name *names;
+    struct name *names = NULL;
 
     num = read_file(FILENAME, &names);
     if (num == -1) {

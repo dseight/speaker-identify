@@ -106,11 +106,11 @@ int main()
     get_mfcc(normalized_data, size, mfcc);
     printf("MFCC computed\n");
 
-    // update_database(mfcc);
-    // printf("Database updated\n");
+    update_database(mfcc);
+    printf("Database updated\n");
 
-    determine_name(mfcc);
-    printf("Name determined\n");
+    //determine_name(mfcc);
+    //printf("Name determined\n");
 
     free_mfcc();
     free(data);
