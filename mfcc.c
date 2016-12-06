@@ -24,6 +24,9 @@ static double filterbank[NCOEFFS][WINDOW_SIZE];
 static int filter_unaligned[NCOEFFS + 2];
 static int *filter = filter_unaligned + 1;
 
+/* Hamming window */
+static double hamming[WINDOW_SIZE];
+
 static fftw_complex *in;
 static fftw_complex *out;
 static fftw_plan p;
@@ -52,8 +55,7 @@ static void fourier_amps(double *data)
 {
     // Apply Hamming window to data before processing
     for (int i = 0; i < WINDOW_SIZE; ++i)
-        in[i] = 0.53836 
-              - 0.46164 * cos(2 * M_PI * data[i] / (WINDOW_SIZE - 1)) + 1 * I;
+        in[i] = hamming[i] * data[i] + 1 * I;
 
     fftw_execute_dft(p, in, out);
 
@@ -119,6 +121,11 @@ int init_mfcc(void)
     // Tell FFTW to use sub-optimal plan and allow it to destroy input data
     p = fftw_plan_dft_1d(WINDOW_SIZE, in, out, FFTW_FORWARD, 
         FFTW_ESTIMATE | FFTW_DESTROY_INPUT);
+
+    // Calculate Hamming window
+    for (int i = 0; i < WINDOW_SIZE; ++i)
+        hamming[i] = 0.53836 
+                   - 0.46164 * cos(2 * M_PI * i / (double) (WINDOW_SIZE - 1));
 
     // Calculate frequencies for filterbank computing
     double step = (hz_to_mel(HIPASS) - hz_to_mel(LOPASS)) / (NCOEFFS + 1);
