@@ -80,6 +80,7 @@ int main()
     if (size < 0) {
         fprintf(stderr, "Error: sound recording failed\n");
         free_mfcc();
+        free(data);
         return 1;
     }
 
@@ -90,6 +91,7 @@ int main()
     double *normalized_data = (double *) malloc(size * sizeof(double));
     if (normalized_data == NULL) {
         fprintf(stderr, "Error: memory allocation failed\n");
+        free(data);
         return 1;
     }
 

@@ -102,13 +102,17 @@ int read_file(char *fname, struct name **names)
 
     int file;
     file = open(fname, O_RDONLY);
-    if (file == -1)
+    if (file == -1) {
+        free(data);
         return -1; /* can't open file */
+    }
 
     status = read(file, data, params.st_size);
     close(file);
-    if (status == -1)
+    if (status == -1) {
+        free(data);
         return -1; /* can't read file */
+    }
 
     int num = fill_struct(names, data, params.st_size);
 
