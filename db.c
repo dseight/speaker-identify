@@ -43,12 +43,13 @@ int fill_struct(struct name **names, char *data, int size)
 
             curr += 2;
             int i;
-            for (i = 0; i < NAME_LEN; i++) /* copy name until '\n' */
+            for (i = 0; i < NAME_LEN - 1; i++) /* copy name until '\n' */
                 if (data[curr + i] == '\n')
                     break;
                 else
                     (*names)[num - 1].name[i] = data[curr + i];
 
+            (*names)[num - 1].name[i] = '\0';
             curr += i;
             (*names)[num - 1].vect = NULL;
         }
