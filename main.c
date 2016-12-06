@@ -93,7 +93,7 @@ int main()
         return 1;
     }
 
-    double max = -100000.0;
+    double max = 0.0;
     for (int i = 0; i < size; ++i)
         if (abs(data[i]) > max)
             max = abs(data[i]);
