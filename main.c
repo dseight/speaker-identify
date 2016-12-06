@@ -116,5 +116,7 @@ int main()
 
     free_mfcc();
     free(data);
+    free(normalized_data);
+    
     return 0;
 }
