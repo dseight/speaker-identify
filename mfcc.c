@@ -77,7 +77,7 @@ void get_mfcc(double const *in, size_t len, double *coeffs)
 
     // Go through all intersecting windows
     for (size_t i = 0; i + WINDOW_SIZE / 2 < len; i += WINDOW_SIZE / 2) {
-        memcpy(window, in + i, WINDOW_SIZE);
+        memcpy(window, in + i, WINDOW_SIZE * sizeof(double));
         fourier_amps(window);
 
         // Calculate energy for each window
