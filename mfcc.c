@@ -13,7 +13,7 @@
 #define TIME_PERIOD ((double) WINDOW_SIZE / (double) SAMPLE_RATE)
 
 #define LOPASS 130
-#define HIPASS 6800
+#define HIPASS 6800     // Must not be higher than half of sample rate
 
 /* Filterbank from Mel Frequency Cepstrum Coefficients.
  * Count of filterbank coefficients equals WINDOW_SIZE / 2 because
