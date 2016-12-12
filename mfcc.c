@@ -75,6 +75,10 @@ void get_mfcc(double const *in, size_t len, double *coeffs)
     double window[WINDOW_SIZE];
     double energy[NCOEFFS];
 
+    // Initialize all coefficients
+    for (int i = 0; i < NCOEFFS; ++i)
+        coeffs[i] = 0.0;
+
     // Go through all intersecting windows
     for (size_t i = 0; i + WINDOW_SIZE < len; i += WINDOW_SIZE / 2) {
         memcpy(window, in + i, WINDOW_SIZE * sizeof(double));
@@ -92,13 +96,15 @@ void get_mfcc(double const *in, size_t len, double *coeffs)
 
         // Apply discrete cosine transfrom to get coefficients
         for (int n = 0; n < NCOEFFS; ++n) {
-            coeffs[n] = 0.0;
-
             for (int m = 0; m < NCOEFFS; ++m)
                 coeffs[n] += energy[m]
                     * cos(M_PI * n * (m + 1.0/2.0) / (double) NCOEFFS);
         }
     }
+
+    // Get average value of coefficients
+    for (int i = 0; i < NCOEFFS; ++i)
+        coeffs[i] /= (double) NCOEFFS;
 }
 
 /* Initialize data needed for MFCC computing (allocate memory, 
