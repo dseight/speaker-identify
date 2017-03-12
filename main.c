@@ -68,6 +68,25 @@ int record_sound(int16_t **song_data, int time)
     return size;
 }
 
+double *normalize_data(int16_t *data, int size)
+{
+    double *normalized_data;
+    double max = 0.0;
+
+    normalized_data = (double *) malloc(size * sizeof(double));
+    if (normalized_data == NULL)
+        return NULL;
+
+    for (int i = 0; i < size; ++i)
+        if (abs(data[i]) > max)
+            max = abs(data[i]);
+
+    for (int i = 0; i < size; ++i)
+        normalized_data[i] = (double) data[i] / max;
+
+    return normalized_data;
+}
+
 int analyze_volume(int16_t *data, int size)
 {
     int i, count;
@@ -107,20 +126,12 @@ int main()
 
     printf("Sound recorded\n");
 
-    double *normalized_data = (double *) malloc(size * sizeof(double));
+    double *normalized_data = normalize_data(data, size);
     if (normalized_data == NULL) {
         fprintf(stderr, "Error: memory allocation failed\n");
         free(data);
         return 1;
     }
-
-    double max = 0.0;
-    for (int i = 0; i < size; ++i)
-        if (abs(data[i]) > max)
-            max = abs(data[i]);
-
-    for (int i = 0; i < size; ++i)
-        normalized_data[i] = (double) data[i] / max;
 
     printf("Normalization completed\n");
 
