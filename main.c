@@ -9,7 +9,11 @@
 #define CHANNELS 1
 #define RATE 16000
 #define FORMAT 16
-#define TIME 5
+#define TIME 2
+#define MIN_VOLUME 0x7fff*0.1
+#define DELTA 0.01
+
+#define abs16(x) ((x > 0) ? x : -(x))
 
 /*
  * this function record time seconds of voice
@@ -62,6 +66,21 @@ int record_sound(int16_t **song_data, int time)
     pa_simple_free(pulse_desc);
 
     return size;
+}
+
+int analyze_volume(int16_t *data, int size)
+{
+    int i, count;
+
+    count = 0;
+    for (i = size - 1; i >= 0; i--)
+        if (abs16(data[i]) > MIN_VOLUME)
+            count++;
+
+    if (count >= size * DELTA)
+        return 1;
+    else
+        return 0;
 }
 
 int main()
