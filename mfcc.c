@@ -41,13 +41,13 @@ static inline int hz_to_index(double f)
 /* Convert frequency f from Hz to Mel scale */
 static inline double hz_to_mel(double f)
 {
-    return 1127.0 * log(1 + f / 700.0);
+    return 1127.0 * log1p(f / 700.0);
 }
 
 /* Convert frequency f from Mel to Hz scale */
 static inline double mel_to_hz(double f)
 {
-    return 700.0 * (exp(f / 1127.0) - 1);
+    return 700.0 * expm1(f / 1127.0);
 }
 
 /* Calculate squared amplitudes of Fourier transfrom on specified data */
@@ -107,7 +107,7 @@ void get_mfcc(double const *in, size_t len, double *coeffs)
         coeffs[i] /= (double) NCOEFFS;
 }
 
-/* Initialize data needed for MFCC computing (allocate memory, 
+/* Initialize data needed for MFCC computing (allocate memory,
  * configure threads, etc). Must be called *once* before using get_mfcc().
  * Returns 0 on success and -1 on failure. */
 int init_mfcc(void)
@@ -125,12 +125,12 @@ int init_mfcc(void)
     }
 
     // Tell FFTW to use sub-optimal plan and allow it to destroy input data
-    p = fftw_plan_dft_1d(WINDOW_SIZE, in, out, FFTW_FORWARD, 
+    p = fftw_plan_dft_1d(WINDOW_SIZE, in, out, FFTW_FORWARD,
         FFTW_ESTIMATE | FFTW_DESTROY_INPUT);
 
     // Calculate Hamming window
     for (int i = 0; i < WINDOW_SIZE; ++i)
-        hamming[i] = 0.53836 
+        hamming[i] = 0.53836
                    - 0.46164 * cos(2 * M_PI * i / (double) (WINDOW_SIZE - 1));
 
     // Calculate frequencies for filterbank computing
